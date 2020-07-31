@@ -50,7 +50,7 @@ exports.handler = function(event, context, callback) {
     if (headers.hasOwnProperty('token') && headers.hasOwnProperty('x-api-key')) {
         if (verifyToken(headers.token, headers['x-api-key'])) {
             //callback(null, generateAllow('me', event.methodArn));
-            callback(null, generateAllow('me', event.methodArn));
+            callback(null, generateAllow('me', '*'));
         } else {
             callback("Unauthorized");
         }
