@@ -22,17 +22,17 @@ Example :
 	 
 		    $apiKey = 'myApiKey';
 			$salt = 'mySalt';
-			$token = sha1($apiKey . $salt . date('Ymd'));
+			$token = sha1($apiKey . $salt . gmdate('Ymd'));
 
 
 
 	 - Algorithme en Javascript (inclure la librairie pour le sha1 https://www.npmjs.com/package/js-sha1):
 
-		    var now = new Date();           // fuseau horaire local
-			var day= now.getUTCDate();
-			var month= now.getUTCMonth() + 1;
-			var year= now.getUTCFullYear();
-			var stringYmd = String(year) + ('0' + String(month)).slice(-2) + String(day);
+		    var now = new Date(); // fuseau horaire local
+            var day = now.getUTCDate();
+            var month = now.getUTCMonth() + 1;
+            var year = now.getUTCFullYear();
+            var stringYmd = String(year) + ('0' + String(month)).slice(-2) + ('0' + String(day)).slice(-2);
 
 			var apikey = 'myApiKey';
 			var salt = 'mySalt';
