@@ -1,7 +1,7 @@
 const sha1 = require('./sha1.min.js');
 const config = require('./config.json');
 
-exports.handler = function(event, context, callback) {        
+exports.handler = function(event, context, callback) {
     //console.log('Received event:', JSON.stringify(event, null, 2));
 
     // A simple request-based authorizer example to demonstrate how to use request 
@@ -16,7 +16,7 @@ exports.handler = function(event, context, callback) {
     var queryStringParameters = event.queryStringParameters;
     var pathParameters = event.pathParameters;
     var stageVariables = event.stageVariables;
-        
+
     // Parse the input for the parameter values
     var tmp = event.methodArn.split(':');
     var apiGatewayArnTmp = tmp[5].split('/');
@@ -29,7 +29,7 @@ exports.handler = function(event, context, callback) {
     if (apiGatewayArnTmp[3]) {
         resource += apiGatewayArnTmp[3];
     }
-        
+
     // Perform authorization to return the Allow policy for correct parameters and 
     // the 'Unauthorized' error, otherwise.
     var authResponse = {};
@@ -46,7 +46,7 @@ exports.handler = function(event, context, callback) {
         callback("Unauthorized");
     }
     */
-    
+
     if (headers.hasOwnProperty('token') && headers.hasOwnProperty('x-api-key')) {
         if (verifyToken(headers.token, headers['x-api-key'])) {
             //callback(null, generateAllow('me', event.methodArn));
@@ -58,7 +58,7 @@ exports.handler = function(event, context, callback) {
         callback("Unauthorized");
     }
 }
-     
+
 // Help function to generate an IAM policy
 var generatePolicy = function(principalId, effect, resource) {
     // Required output:
@@ -83,11 +83,11 @@ var generatePolicy = function(principalId, effect, resource) {
     };
     return authResponse;
 }
-     
+
 var generateAllow = function(principalId, resource) {
     return generatePolicy(principalId, 'Allow', resource);
 }
-     
+
 var generateDeny = function(principalId, resource) {
     return generatePolicy(principalId, 'Deny', resource);
 }
@@ -99,17 +99,17 @@ function verifyToken(token, apikey) {
     } else {
         return false;
     }
-        
-    var now = new Date();           // fuseau horaire local
-    var day= now.getUTCDate();
-    var month= now.getUTCMonth() + 1;
-    var year= now.getUTCFullYear();
-    var stringYmd = String(year) + ('0' + String(month)).slice(-2) + String(day);
+
+    var now = new Date(); // fuseau horaire local
+    var day = now.getUTCDate();
+    var month = now.getUTCMonth() + 1;
+    var year = now.getUTCFullYear();
+    var stringYmd = String(year) + ('0' + String(month)).slice(-2) + ('0' + String(day)).slice(-2);
 
     if (token == generateToken(stringYmd, apikey, salt)) {
         return true;
     }
-    
+
     return false;
 }
 
