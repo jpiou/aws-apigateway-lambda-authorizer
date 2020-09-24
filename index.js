@@ -1,7 +1,7 @@
 const sha1 = require('./sha1.min.js');
 const config = require('./config.json');
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
     //console.log('Received event:', JSON.stringify(event, null, 2));
 
     // A simple request-based authorizer example to demonstrate how to use request 
@@ -37,15 +37,15 @@ exports.handler = function(event, context, callback) {
     condition.IpAddress = {};
 
     /*
-    if (headers.jpiouauth === "jonathan"
-        // && queryStringParameters.QueryString1 === "queryValue1"
-        // && stageVariables.StageVar1 === "stageValue1"
-    ) {
-        callback(null, generateAllow('me', event.methodArn));
-    }  else {
-        callback("Unauthorized");
-    }
-    */
+     if (headers.jpiouauth === "jonathan"
+     // && queryStringParameters.QueryString1 === "queryValue1"
+     // && stageVariables.StageVar1 === "stageValue1"
+     ) {
+     callback(null, generateAllow('me', event.methodArn));
+     }  else {
+     callback("Unauthorized");
+     }
+     */
 
     if (headers.hasOwnProperty('token') && headers.hasOwnProperty('x-api-key')) {
         if (verifyToken(headers.token, headers['x-api-key'])) {
@@ -60,7 +60,7 @@ exports.handler = function(event, context, callback) {
 }
 
 // Help function to generate an IAM policy
-var generatePolicy = function(principalId, effect, resource) {
+var generatePolicy = function (principalId, effect, resource) {
     // Required output:
     var authResponse = {};
     authResponse.principalId = principalId;
@@ -84,11 +84,11 @@ var generatePolicy = function(principalId, effect, resource) {
     return authResponse;
 }
 
-var generateAllow = function(principalId, resource) {
+var generateAllow = function (principalId, resource) {
     return generatePolicy(principalId, 'Allow', resource);
 }
 
-var generateDeny = function(principalId, resource) {
+var generateDeny = function (principalId, resource) {
     return generatePolicy(principalId, 'Deny', resource);
 }
 
@@ -106,7 +106,21 @@ function verifyToken(token, apikey) {
     var year = now.getUTCFullYear();
     var stringYmd = String(year) + ('0' + String(month)).slice(-2) + ('0' + String(day)).slice(-2);
 
-    if (token == generateToken(stringYmd, apikey, salt)) {
+    var yesterday = new Date(now);
+    yesterday.setDate(yesterday.getUTCDate() - 1);
+    var stringYmdYesterday = String(yesterday.getUTCFullYear()) + ('0' + String(yesterday.getUTCMonth() + 1)).slice(-2) + ('0' + String(yesterday.getUTCDate())).slice(-2);
+
+    var tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getUTCDate() + 1);
+    var stringYmdTomorrow = String(tomorrow.getUTCFullYear()) + ('0' + String(tomorrow.getUTCMonth() + 1)).slice(-2) + ('0' + String(tomorrow.getUTCDate())).slice(-2);
+
+    var accepted = [
+        generateToken(stringYmd, apikey, salt),
+        generateToken(stringYmdYesterday, apikey, salt),
+        generateToken(stringYmdTomorrow, apikey, salt)
+    ];
+
+    if (accepted.indexOf(token) !== -1) {
         return true;
     }
 
