@@ -1,8 +1,8 @@
 An easy Lambda auhtorizer for API gateway, see [https://docs.aws.amazon.com/fr_fr/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html](https://docs.aws.amazon.com/fr_fr/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
 
-Example :
+Example d'un service API gateway :
 > curl -X GET \  
-[https://fi0sa9jjmf.execute-api.eu-west-1.amazonaws.com/stable/v2/secure/tokenize/VOD69217605485000](https://fi0sa9jjmf.execute-api.eu-west-1.amazonaws.com/stable/v2/secure/tokenize/VOD69217605485000) \  
+[https://7wshnhcek9.execute-api.eu-west-1.amazonaws.com/stable/v2/secure/tokenize/VOD69217605485000](https://7wshnhcek9.execute-api.eu-west-1.amazonaws.com/stable/v2/secure/tokenize/VOD69217605485000) \  
 -H 'x-api-key:myApiKey'
 -H 'token:{TO_GENERATE}'
 
@@ -26,7 +26,7 @@ Example :
 
 
 
-	 - Algorithme en Javascript (inclure la librairie pour le sha1 https://www.npmjs.com/package/js-sha1):
+	 - Algorithme en Javascript (inclure la librairie sha1 https://www.npmjs.com/package/js-sha1):
 
 		    var now = new Date(); // fuseau horaire local
             var day = now.getUTCDate();
